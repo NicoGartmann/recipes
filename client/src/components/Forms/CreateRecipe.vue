@@ -11,10 +11,10 @@
       <v-col cols="3">
         <v-text-field v-model="ingredient.unit" label="Einheit"/>
       </v-col>
-      <v-col cols="5">
+      <v-col cols="6">
         <v-text-field v-model="ingredient.name" label="Zutat" clearable/>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="1">
         <v-btn @click="addIngredient">Zutat hinzufügen</v-btn>
       </v-col>
     </v-row>
@@ -22,7 +22,13 @@
       <v-col>
         <v-list>
           <v-list-item v-for="(ing, index) in ingredients" :key="index" :title="ing.name"
-                       :subtitle="ing.amount + ' ' + ing.unit"/>
+                       :subtitle="ing.amount + ' ' + ing.unit">
+            <template v-slot:append>
+              <v-btn icon @click="removeIngredient(index)">
+                <v-icon>mdi-trash-can-outline</v-icon>
+              </v-btn>
+            </template>
+          </v-list-item>
         </v-list>
       </v-col>
     </v-row>
@@ -88,6 +94,10 @@ const addIngredient = () => {
   ingredient.name = '';
   ingredient.unit = '';
   ingredient.amount = '';
+}
+
+const removeIngredient = (index) => {
+  ingredients.splice(index, 1);
 }
 
 const addStep = () => {
