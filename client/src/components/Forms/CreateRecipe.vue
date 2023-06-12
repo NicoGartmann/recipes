@@ -78,7 +78,7 @@ const save = () => {
     ingredients: ingredients,
     steps: steps
   }
-  console.log(recipe);
+
   axios.post("api/recipeList", recipe)
     .then((response) => {
       console.log("Erfolg");
