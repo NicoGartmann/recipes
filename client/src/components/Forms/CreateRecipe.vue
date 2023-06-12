@@ -18,11 +18,18 @@
         <v-btn @click="addIngredient">Zutat hinzufügen</v-btn>
       </v-col>
     </v-row>
-   <v-list>
-      <v-list-item v-for="(ing, index) in ingredients" :key="index" :title="ing.name"/>
-    </v-list>
+    <v-row>
+      <v-col>
+        <v-list>
+          <v-list-item v-for="(ing, index) in ingredients" :key="index" :title="ing.name"
+                       :subtitle="ing.amount + ' ' + ing.unit"/>
+        </v-list>
+      </v-col>
+    </v-row>
+
     <h2>Zubereitungsschritte</h2>
-    <v-text-field v-model="stepDescription" label="Schritt" append-inner-icon="mdi-plus" @click:append-inner="addStep" clearable/>
+    <v-text-field v-model="stepDescription" label="Schritt" append-inner-icon="mdi-plus" @click:append-inner="addStep"
+                  clearable/>
     <v-list>
       <v-list-item v-for="step in steps" :key="step.stepNumber" :title="step.description"/>
     </v-list>
@@ -66,7 +73,7 @@ const save = () => {
     steps: steps
   }
   console.log(recipe);
-  axios.post("api/recipeList",recipe)
+  axios.post("api/recipeList", recipe)
     .then((response) => {
       console.log("Erfolg");
     })
@@ -76,12 +83,15 @@ const save = () => {
 }
 
 const addIngredient = () => {
-  const newIngredient = { ...ingredient };
+  const newIngredient = {...ingredient};
   ingredients.push(newIngredient);
+  ingredient.name = '';
+  ingredient.unit = '';
+  ingredient.amount = '';
 }
 
 const addStep = () => {
-  const newStep = { stepNumber: steps.length + 1, description: stepDescription.value }
+  const newStep = {stepNumber: steps.length + 1, description: stepDescription.value}
   steps.push(newStep);
 }
 
