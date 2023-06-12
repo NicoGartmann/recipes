@@ -21,7 +21,7 @@
     <v-row>
       <v-col>
         <v-list>
-          <v-list-item v-for="(ing, index) in ingredients" :key="index" :title="ing.name"
+          <v-list-item border v-for="(ing, index) in ingredients" :key="index" :title="ing.name"
                        :subtitle="ing.amount + ' ' + ing.unit">
             <template v-slot:append>
               <v-btn icon @click="removeIngredient(index)">
@@ -37,7 +37,13 @@
     <v-text-field v-model="stepDescription" label="Schritt" append-inner-icon="mdi-plus" @click:append-inner="addStep"
                   clearable/>
     <v-list>
-      <v-list-item v-for="step in steps" :key="step.stepNumber" :title="step.description"/>
+      <v-list-item border v-for="(step, index) in steps" :key="step.stepNumber" :title="step.description">
+        <template v-slot:append>
+          <v-btn icon @click="removeStep(index)">
+            <v-icon>mdi-trash-can-outline</v-icon>
+          </v-btn>
+        </template>
+      </v-list-item>
     </v-list>
     <v-btn-group>
       <v-btn color="red" prepend-icon="mdi-close">
@@ -103,6 +109,11 @@ const removeIngredient = (index) => {
 const addStep = () => {
   const newStep = {stepNumber: steps.length + 1, description: stepDescription.value}
   steps.push(newStep);
+  stepDescription.value = '';
+}
+
+const removeStep = (index) => {
+  steps.splice(index, 1);
 }
 
 function closeDialog() {
