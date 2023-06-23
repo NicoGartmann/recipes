@@ -49,7 +49,6 @@
       <v-btn color="red" prepend-icon="mdi-close">
         Abbrechen
       </v-btn>
-
       <v-btn color="green" prepend-icon="mdi-content-save" @click="save">
         Speichern
       </v-btn>
