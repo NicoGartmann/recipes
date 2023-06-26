@@ -6,16 +6,16 @@
     <h2>Zutaten</h2>
     <v-row>
       <v-col cols="2">
-        <v-text-field v-model="ingredient.amount" label="Anzahl"/>
+        <v-text-field v-model="ingredientInput.amount" label="Anzahl"/>
       </v-col>
       <v-col cols="3">
-        <v-text-field v-model="ingredient.unit" label="Einheit"/>
+        <v-text-field v-model="ingredientInput.unit" label="Einheit"/>
       </v-col>
       <v-col cols="6">
-        <v-text-field v-model="ingredient.name" label="Zutat" clearable/>
+        <v-text-field v-model="ingredientInput.name" label="Zutat" clearable/>
       </v-col>
       <v-col cols="1">
-        <v-btn @click="addIngredient">Zutat hinzufügen</v-btn>
+        <v-btn @click="addIngredient">Hinzufügen</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -34,16 +34,20 @@
     </v-row>
 
     <h2>Zubereitungsschritte</h2>
-    <v-text-field v-model="stepDescription" label="Schritt" append-inner-icon="mdi-plus" @click:append-inner="addStep"
+    <v-text-field v-model="stepDescriptionInput" label="Schritt" append-inner-icon="mdi-plus" @click:append-inner="addStep"
                   clearable/>
     <v-list>
-      <v-list-item border v-for="(step, index) in steps" :key="step.stepNumber" :title="step.description">
-        <template v-slot:append>
-          <v-btn icon @click="removeStep(index)">
-            <v-icon>mdi-trash-can-outline</v-icon>
-          </v-btn>
+      <draggable v-model="steps" item-key="stepNumber" @end="updateStepNumbers">
+        <template #item="{ element }">
+          <v-list-item :id="element.stepNumber" border :title="element.stepNumber" :subtitle="element.description">
+            <template v-slot:append>
+              <v-btn icon @click="removeStep(index)">
+                <v-icon>mdi-trash-can-outline</v-icon>
+              </v-btn>
+            </template>
+          </v-list-item>
         </template>
-      </v-list-item>
+      </draggable>
     </v-list>
     <v-btn-group>
       <v-btn color="red" prepend-icon="mdi-close">
@@ -58,22 +62,30 @@
 
 <script setup>
 import axios from 'axios'
+import draggable from 'vuedraggable'
 import {reactive, ref} from 'vue'
 
-const ingredient = reactive({
+const ingredientInput = reactive({
   name: '',
   unit: '',
   amount: ''
 });
 
-const stepDescription = ref();
+const stepDescriptionInput = ref();
 
 const name = ref();
 const description = ref();
 const ingredients = reactive([]);
-const steps = reactive([]);
+const steps = ref([]);
 
-function abort() {
+const updateStepNumbers = () => {
+  steps.value.forEach((step, index) => {
+    step.stepNumber = index + 1;
+  })
+}
+
+const abort = () => {
+
 }
 
 const save = () => {
@@ -81,7 +93,7 @@ const save = () => {
     name: name.value,
     description: description.value,
     ingredients: ingredients,
-    steps: steps
+    steps: Array.from(steps.value)
   }
 
   axios.post("api/recipeList", recipe)
@@ -94,11 +106,11 @@ const save = () => {
 }
 
 const addIngredient = () => {
-  const newIngredient = {...ingredient};
+  const newIngredient = {...ingredientInput};
   ingredients.push(newIngredient);
-  ingredient.name = '';
-  ingredient.unit = '';
-  ingredient.amount = '';
+  ingredientInput.name = '';
+  ingredientInput.unit = '';
+  ingredientInput.amount = '';
 }
 
 const removeIngredient = (index) => {
@@ -106,16 +118,17 @@ const removeIngredient = (index) => {
 }
 
 const addStep = () => {
-  const newStep = {stepNumber: steps.length + 1, description: stepDescription.value}
-  steps.push(newStep);
-  stepDescription.value = '';
+  const newStep = {stepNumber: steps.value.length + 1, description: stepDescriptionInput.value}
+  steps.value.push(newStep);
+  stepDescriptionInput.value = '';
 }
 
 const removeStep = (index) => {
-  steps.splice(index, 1);
+  steps.value.splice(index, 1);
+  updateStepNumbers();
 }
 
-function closeDialog() {
+const closeDialog = () => {
 }
 </script>
 
