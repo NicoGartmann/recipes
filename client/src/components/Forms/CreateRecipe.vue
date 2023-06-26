@@ -6,16 +6,16 @@
     <h2>Zutaten</h2>
     <v-row>
       <v-col cols="2">
-        <v-text-field v-model="ingredient.amount" label="Anzahl"/>
+        <v-text-field v-model="ingredientInput.amount" label="Anzahl"/>
       </v-col>
       <v-col cols="3">
-        <v-text-field v-model="ingredient.unit" label="Einheit"/>
+        <v-text-field v-model="ingredientInput.unit" label="Einheit"/>
       </v-col>
       <v-col cols="6">
-        <v-text-field v-model="ingredient.name" label="Zutat" clearable/>
+        <v-text-field v-model="ingredientInput.name" label="Zutat" clearable/>
       </v-col>
       <v-col cols="1">
-        <v-btn @click="addIngredient">Zutat hinzufügen</v-btn>
+        <v-btn @click="addIngredient">Hinzufügen</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -65,7 +65,7 @@ import axios from 'axios'
 import draggable from 'vuedraggable'
 import {reactive, ref} from 'vue'
 
-const ingredient = reactive({
+const ingredientInput = reactive({
   name: '',
   unit: '',
   amount: ''
@@ -84,7 +84,8 @@ const updateStepNumbers = () => {
   })
 }
 
-function abort() {
+const abort = () => {
+
 }
 
 const save = () => {
@@ -105,11 +106,11 @@ const save = () => {
 }
 
 const addIngredient = () => {
-  const newIngredient = {...ingredient};
+  const newIngredient = {...ingredientInput};
   ingredients.push(newIngredient);
-  ingredient.name = '';
-  ingredient.unit = '';
-  ingredient.amount = '';
+  ingredientInput.name = '';
+  ingredientInput.unit = '';
+  ingredientInput.amount = '';
 }
 
 const removeIngredient = (index) => {
@@ -127,7 +128,7 @@ const removeStep = (index) => {
   updateStepNumbers();
 }
 
-function closeDialog() {
+const closeDialog = () => {
 }
 </script>
 
