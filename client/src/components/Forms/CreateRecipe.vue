@@ -117,13 +117,14 @@ const removeIngredient = (index) => {
 }
 
 const addStep = () => {
-  const newStep = {stepNumber: steps.length + 1, description: stepDescription.value}
-  steps.push(newStep);
-  stepDescription.value = '';
+  const newStep = {stepNumber: steps.value.length + 1, description: stepDescriptionInput.value}
+  steps.value.push(newStep);
+  stepDescriptionInput.value = '';
 }
 
 const removeStep = (index) => {
-  steps.splice(index, 1);
+  steps.value.splice(index, 1);
+  updateStepNumbers();
 }
 
 function closeDialog() {
