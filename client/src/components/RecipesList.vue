@@ -1,19 +1,35 @@
 <template>
   <h1>Rezepte</h1>
+  <v-snackbar :color="snackBarColor" v-model="showSnackBar">
+    {{ deletionMessage }}
+  </v-snackbar>
   <v-row>
-    <v-col cols="4" v-for="recipe in recipes" :key="recipe.name">
+    <v-col cols="4" v-if="recipes" v-for="recipe in recipes" :key="recipe.name">
       <v-card :title=recipe.name :subtitle=recipe.author :text=recipe.description>
         <v-card-actions>
           <v-btn>Details anzeigen</v-btn>
+          <v-spacer/>
+          <ConfirmDeleteRecipe v-bind="{recipe}" @recipe-deleted-success="recipeDeletedSuccess"
+                               @recipe-deleted-failed="recipeDeletedFailed"></ConfirmDeleteRecipe>
         </v-card-actions>
       </v-card>
+    </v-col>
+    <v-col v-else col="12">
+      <p>Es sind noch keine Rezepte vorhanden. Erstelle ein neues Rezept
+        <router-link to="/create">hier</router-link>
+      </p>
     </v-col>
   </v-row>
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import axios from "axios";
+import ConfirmDeleteRecipe from "@/components/Dialogs/Confirm-Delete-Recipe.vue";
+
+const showSnackBar = ref(false);
+const deletionMessage = ref();
+const snackBarColor = ref('');
 
 const recipes = ref();
 const fetchRecipes = () => {
@@ -26,6 +42,21 @@ const fetchRecipes = () => {
     })
 }
 
-fetchRecipes()
+const recipeDeletedSuccess = (message) => {
+  showSnackBar.value = true;
+  snackBarColor.value = 'green';
+  deletionMessage.value = message;
+  fetchRecipes();
+}
 
+const recipeDeletedFailed = (message) => {
+  showSnackBar.value = true;
+  snackBarColor.value = 'red';
+  deletionMessage.value = message;
+  fetchRecipes();
+}
+
+onMounted(() => {
+  fetchRecipes()
+});
 </script>
