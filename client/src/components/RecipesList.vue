@@ -3,9 +3,9 @@
   <v-snackbar :color="snackBarColor" v-model="showSnackBar">
     {{ deletionMessage }}
   </v-snackbar>
-  <v-row>
-    <v-col cols="4" v-if="recipes" v-for="recipe in recipes" :key="recipe.name">
-      <v-card :title=recipe.name :subtitle=recipe.author :text=recipe.description>
+  <v-row v-if="recipes.length !== 0">
+    <v-col cols="4" v-for="recipe in recipes" :key="recipe.name">
+      <v-card :title="recipe.name" :subtitle="recipe.author" :text="recipe.description">
         <v-card-actions>
           <v-btn>Details anzeigen</v-btn>
           <v-spacer/>
@@ -14,7 +14,9 @@
         </v-card-actions>
       </v-card>
     </v-col>
-    <v-col v-else col="12">
+  </v-row>
+  <v-row v-else>
+    <v-col>
       <p>Es sind noch keine Rezepte vorhanden. Erstelle ein neues Rezept
         <router-link to="/create">hier</router-link>
       </p>
@@ -31,7 +33,7 @@ const showSnackBar = ref(false);
 const deletionMessage = ref();
 const snackBarColor = ref('');
 
-const recipes = ref();
+const recipes = ref([]);
 const fetchRecipes = () => {
   axios.get("api/recipeList")
     .then((response) => {
@@ -56,7 +58,5 @@ const recipeDeletedFailed = (message) => {
   fetchRecipes();
 }
 
-onMounted(() => {
-  fetchRecipes()
-});
+onMounted(fetchRecipes);
 </script>

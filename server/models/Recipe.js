@@ -9,6 +9,11 @@ const RecipeSchema = new Schema({
         type: String,
         required: true,
     },
+    author: {
+        type: String,
+        required: true,
+        default: 'Gast Nutzer'
+    },
     ingredients: [{ name: String, amount: Number, unit: {type: String, required: false}}],
     steps: [{ stepNumber: Number, description: String }]
 });
