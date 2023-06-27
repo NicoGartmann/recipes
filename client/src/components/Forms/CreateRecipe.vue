@@ -37,7 +37,8 @@
     </v-row>
 
     <h2>Zubereitungsschritte</h2>
-    <v-text-field v-model="stepDescriptionInput" label="Schritt" append-inner-icon="mdi-plus" @click:append-inner="addStep"
+    <v-text-field v-model="stepDescriptionInput" label="Schritt" append-inner-icon="mdi-plus"
+                  @click:append-inner="addStep"
                   clearable/>
     <v-list>
       <draggable v-model="steps" item-key="stepNumber" @end="updateStepNumbers">
@@ -54,7 +55,7 @@
     </v-list>
     <v-btn-group>
       <v-btn color="red" prepend-icon="mdi-close">
-        Abbrechen
+        <ConfirmAbort/>
       </v-btn>
       <v-btn color="green" prepend-icon="mdi-content-save" @click="save">
         Speichern
@@ -67,6 +68,7 @@
 import axios from 'axios'
 import draggable from 'vuedraggable'
 import {reactive, ref} from 'vue'
+import ConfirmAbort from "@/components/Dialogs/Confirm-Abort.vue";
 
 const snackBarColor = ref('');
 const showSnackBar = ref(false);
@@ -89,10 +91,6 @@ const updateStepNumbers = () => {
   steps.value.forEach((step, index) => {
     step.stepNumber = index + 1;
   })
-}
-
-const abort = () => {
-
 }
 
 const save = () => {
@@ -139,9 +137,6 @@ const addStep = () => {
 const removeStep = (index) => {
   steps.value.splice(index, 1);
   updateStepNumbers();
-}
-
-const closeDialog = () => {
 }
 </script>
 
