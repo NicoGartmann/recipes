@@ -1,4 +1,7 @@
 <template>
+  <v-snackbar :color="snackBarColor" v-model="showSnackBar">
+    {{ snackBarMessage }}
+  </v-snackbar>
   <h1>Rezept hinzufügen</h1>
   <v-form>
     <v-text-field v-model="name" label="Name" clearable required/>
@@ -65,6 +68,10 @@ import axios from 'axios'
 import draggable from 'vuedraggable'
 import {reactive, ref} from 'vue'
 
+const snackBarColor = ref('');
+const showSnackBar = ref(false);
+const snackBarMessage = ref('');
+
 const ingredientInput = reactive({
   name: '',
   unit: '',
@@ -98,10 +105,16 @@ const save = () => {
 
   axios.post("api/recipeList", recipe)
     .then((response) => {
-      console.log("Erfolg");
+      console.log("Rezept erfolgreich gespeichert.");
+      showSnackBar.value = true;
+      snackBarColor.value = 'green';
+      snackBarMessage.value = "Rezept erfolgreich gespeichert.";
     })
     .catch((error) => {
-      console.log("Error");
+      console.log("Fehler beim Speichern des Rezeptes");
+      showSnackBar.value = true;
+      snackBarColor.value = 'red';
+      snackBarMessage.value = "Fehler beim Speichern des Rezeptes";
     })
 }
 
