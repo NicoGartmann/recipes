@@ -13,6 +13,17 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async(req, res) => {
+    const { id } = req.params;
+    try {
+        const recipe = await Recipe.find({_id: id});
+        if (!recipe) throw new Error(`Something went wrong fetching the Recipe with id ${id}`);
+        res.status(200).json(recipe);
+    } catch (error) {
+        res.status(500).json({message: error.message });
+    }
+});
+
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
     try {
