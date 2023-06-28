@@ -45,17 +45,19 @@ const fetchRecipes = () => {
 }
 
 const recipeDeletedSuccess = (message) => {
-  showSnackBar.value = true;
-  snackBarColor.value = 'green';
-  deletionMessage.value = message;
+  showSnackBar('green', message);
   fetchRecipes();
 }
 
 const recipeDeletedFailed = (message) => {
-  showSnackBar.value = true;
-  snackBarColor.value = 'red';
-  deletionMessage.value = message;
+  showSnackbar('red', message);
   fetchRecipes();
+}
+
+const showSnackbar = (color, message) => {
+  showSnackBar.value = true;
+  snackBarColor.value = color;
+  deletionMessage.value = message;
 }
 
 onMounted(fetchRecipes);

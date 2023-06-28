@@ -84,7 +84,7 @@ const stepDescriptionInput = ref();
 
 const name = ref();
 const description = ref();
-const ingredients = reactive([]);
+const ingredients = ref([]);
 const steps = ref([]);
 
 const updateStepNumbers = () => {
@@ -97,35 +97,44 @@ const save = () => {
   const recipe = {
     name: name.value,
     description: description.value,
-    ingredients: ingredients,
+    ingredients: Array.from(ingredients.value),
     steps: Array.from(steps.value)
   }
 
   axios.post("api/recipeList", recipe)
     .then((response) => {
       console.log("Rezept erfolgreich gespeichert.");
-      showSnackBar.value = true;
-      snackBarColor.value = 'green';
-      snackBarMessage.value = "Rezept erfolgreich gespeichert.";
+      showSnackbar('green', 'Rezept erfolgreich gespeichert.');
+      clearInput();
     })
     .catch((error) => {
       console.log("Fehler beim Speichern des Rezeptes");
-      showSnackBar.value = true;
-      snackBarColor.value = 'red';
-      snackBarMessage.value = "Fehler beim Speichern des Rezeptes";
+      showSnackbar('red', 'Fehler beim Speichern des Rezeptes')
     })
 }
 
+const clearInput = () => {
+  name.value = '';
+  description.value = '';
+  ingredients.value = [];
+  steps.value = [];
+}
+
+const showSnackbar = (color, message) => {
+  showSnackBar.value = true;
+  snackBarColor.value = color;
+  snackBarMessage.value = message
+}
 const addIngredient = () => {
   const newIngredient = {...ingredientInput};
-  ingredients.push(newIngredient);
+  ingredients.value.push(newIngredient);
   ingredientInput.name = '';
   ingredientInput.unit = '';
   ingredientInput.amount = '';
 }
 
 const removeIngredient = (index) => {
-  ingredients.splice(index, 1);
+  ingredients.value.splice(index, 1);
 }
 
 const addStep = () => {
