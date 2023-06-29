@@ -2,7 +2,7 @@
   <v-row>
     <v-col>
       <h1>{{ recipe.name }}</h1>
-      <small><i>Autor: {{ recipe.author}}</i></small>
+      <small><i>Autor: {{ recipe.author }}</i></small>
     </v-col>
   </v-row>
   <v-row>
@@ -10,9 +10,15 @@
       <h2>{{ recipe.description }}</h2>
     </v-col>
   </v-row>
+
   <v-row>
     <v-col>
       <h3>Zutaten:</h3>
+    </v-col>
+  </v-row>
+
+  <v-row>
+    <v-col>
       <v-table>
         <tbody>
         <tr v-for="ingredient in recipe.ingredients" :key="ingredient._id">
@@ -28,19 +34,20 @@
       <h3>Zubereitung:</h3>
     </v-col>
   </v-row>
+  <v-row v-for="step in recipe.steps" :key="step._id">
+    <v-col cols="2" align="center">
+      {{ step.stepNumber }}
+    </v-col>
+    <v-col cols="9">
+      <div class="">
+        {{ step.description }}
+      </div>
+    </v-col>
+  </v-row>
   <v-row>
     <v-col>
 
-      <v-row v-for="step in recipe.steps" :key="step._id">
-        <v-col cols="2" align="center">
-          {{ step.stepNumber }}
-        </v-col>
-        <v-col cols="9">
-          <div class="">
-            {{ step.description }}
-          </div>
-        </v-col>
-      </v-row>
+
     </v-col>
   </v-row>
 
