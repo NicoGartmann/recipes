@@ -7,7 +7,7 @@
 
 
   <v-row v-if="recipes.length !== 0">
-    <v-col cols="4" v-for="recipe in recipes" :key="recipe.name">
+    <v-col v-for="recipe in recipes" :key="recipe.name">
       <v-card :title="recipe.name" :subtitle="recipe.author" :text="recipe.description">
         <v-card-actions>
           <v-btn><router-link :to="recipe._id">Details anzeigen</router-link></v-btn>
