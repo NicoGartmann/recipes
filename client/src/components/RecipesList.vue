@@ -56,7 +56,7 @@ const fetchRecipes = () => {
 }
 
 const recipeDeletedSuccess = (message) => {
-  showSnackBar('green', message);
+  showSnackbar('green', message);
   fetchRecipes();
 }
 
