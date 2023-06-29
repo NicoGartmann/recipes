@@ -1,8 +1,11 @@
 <template>
-  <h1>Rezepte</h1>
-  <v-snackbar :color="snackBarColor" v-model="showSnackBar">
-    {{ deletionMessage }}
-  </v-snackbar>
+  <v-row>
+    <v-col>
+      <h1>Rezepte</h1>
+    </v-col>
+  </v-row>
+
+
   <v-row v-if="recipes.length !== 0">
     <v-col cols="4" v-for="recipe in recipes" :key="recipe.name">
       <v-card :title="recipe.name" :subtitle="recipe.author" :text="recipe.description">
@@ -22,6 +25,14 @@
       </p>
     </v-col>
   </v-row>
+
+  <v-row>
+    <v-col>
+      <v-snackbar :color="snackBarColor" v-model="snackBarTrigger">
+        {{ snackBarMessage }}
+      </v-snackbar>
+    </v-col>
+  </v-row>
 </template>
 
 <script setup>
@@ -29,8 +40,8 @@ import {onMounted, ref} from "vue";
 import axios from "axios";
 import ConfirmDeleteRecipe from "@/components/Dialogs/Confirm-Delete-Recipe.vue";
 
-const showSnackBar = ref(false);
-const deletionMessage = ref();
+const snackBarTrigger = ref(false);
+const snackBarMessage = ref();
 const snackBarColor = ref('');
 
 const recipes = ref([]);
@@ -55,9 +66,9 @@ const recipeDeletedFailed = (message) => {
 }
 
 const showSnackbar = (color, message) => {
-  showSnackBar.value = true;
+  snackBarTrigger.value = true;
   snackBarColor.value = color;
-  deletionMessage.value = message;
+  snackBarMessage.value = message;
 }
 
 onMounted(fetchRecipes);

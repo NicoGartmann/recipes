@@ -1,41 +1,29 @@
 <template>
-  <v-snackbar :color="snackBarColor" v-model="showSnackBar">
-    {{ snackBarMessage }}
-  </v-snackbar>
-  <h1>Rezept hinzufügen</h1>
+
+  <v-row>
+    <v-col>
+      <h1>Rezept hinzufügen</h1>
+    </v-col>
+  </v-row>
+
   <v-form>
     <v-text-field v-model="name" label="Name" clearable required/>
     <v-textarea v-model="description" label="Beschreibung" clearable/>
     <h2>Zutaten</h2>
-    <v-row>
-      <v-col cols="2">
-        <v-text-field v-model="ingredientInput.amount" label="Anzahl"/>
-      </v-col>
-      <v-col cols="3">
-        <v-text-field v-model="ingredientInput.unit" label="Einheit"/>
-      </v-col>
-      <v-col cols="6">
-        <v-text-field v-model="ingredientInput.name" label="Zutat" clearable/>
-      </v-col>
-      <v-col cols="1">
-        <v-btn @click="addIngredient">Hinzufügen</v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-list>
-          <v-list-item border v-for="(ing, index) in ingredients" :key="index" :title="ing.name"
-                       :subtitle="ing.amount + ' ' + ing.unit">
-            <template v-slot:append>
-              <v-btn icon @click="removeIngredient(index)">
-                <v-icon>mdi-trash-can-outline</v-icon>
-              </v-btn>
-            </template>
-          </v-list-item>
-        </v-list>
-      </v-col>
-    </v-row>
-
+    <v-text-field v-model="ingredientInput.amount" label="Anzahl"/>
+    <v-text-field v-model="ingredientInput.unit" label="Einheit"/>
+    <v-text-field v-model="ingredientInput.name" label="Zutat" clearable/>
+    <v-btn @click="addIngredient" align="center">Hinzufügen</v-btn>
+    <v-list>
+      <v-list-item border v-for="(ing, index) in ingredients" :key="index" :title="ing.name"
+                   :subtitle="ing.amount + ' ' + ing.unit">
+        <template v-slot:append>
+          <v-btn icon @click="removeIngredient(index)">
+            <v-icon>mdi-trash-can-outline</v-icon>
+          </v-btn>
+        </template>
+      </v-list-item>
+    </v-list>
     <h2>Zubereitungsschritte</h2>
     <v-text-field v-model="stepDescriptionInput" label="Schritt" append-inner-icon="mdi-plus"
                   @click:append-inner="addStep"
@@ -62,6 +50,14 @@
       </v-btn>
     </v-btn-group>
   </v-form>
+
+  <v-row>
+    <v-col>
+      <v-snackbar :color="snackBarColor" v-model="snackBarTrigger">
+        {{ snackBarMessage }}
+      </v-snackbar>
+    </v-col>
+  </v-row>
 </template>
 
 <script setup>
@@ -70,8 +66,8 @@ import draggable from 'vuedraggable'
 import {reactive, ref} from 'vue'
 import ConfirmAbort from "@/components/Dialogs/Confirm-Abort.vue";
 
+const snackBarTrigger = ref(false);
 const snackBarColor = ref('');
-const showSnackBar = ref(false);
 const snackBarMessage = ref('');
 
 const ingredientInput = reactive({
@@ -121,7 +117,7 @@ const clearInput = () => {
 }
 
 const showSnackbar = (color, message) => {
-  showSnackBar.value = true;
+  snackBarTrigger.value = true;
   snackBarColor.value = color;
   snackBarMessage.value = message
 }
