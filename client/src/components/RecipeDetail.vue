@@ -7,7 +7,13 @@
   </v-row>
   <v-row>
     <v-col>
-      <h2>{{ recipe.description }}</h2>
+      <v-btn color="grey"><v-icon>mdi-pencil</v-icon>Bearbeiten</v-btn>
+      <v-btn color="red"><v-icon>mdi-trash-can-outline</v-icon>Löschen</v-btn>
+    </v-col>
+  </v-row>
+  <v-row>
+    <v-col>
+      <p>{{ recipe.description }}</p>
     </v-col>
   </v-row>
 
