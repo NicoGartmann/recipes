@@ -13,7 +13,7 @@
     <v-text-field v-model="ingredientInput.amount" label="Anzahl"/>
     <v-text-field v-model="ingredientInput.unit" label="Einheit"/>
     <v-text-field v-model="ingredientInput.name" label="Zutat" clearable/>
-    <v-btn @click="addIngredient" align="center">Hinzufügen</v-btn>
+    <v-btn color="grey" @click="addIngredient" align="center">Hinzufügen</v-btn>
     <v-list>
       <v-list-item border v-for="(ing, index) in ingredients" :key="index" :title="ing.name"
                    :subtitle="ing.amount + ' ' + ing.unit">
