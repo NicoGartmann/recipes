@@ -18,9 +18,9 @@
       <v-list-item border v-for="(ing, index) in ingredients" :key="index" :title="ing.name"
                    :subtitle="ing.amount + ' ' + ing.unit">
         <template v-slot:append>
-          <v-btn icon @click="removeIngredient(index)">
-            <v-icon>mdi-trash-can-outline</v-icon>
-          </v-btn>
+          <v-icon @click="removeIngredient(index)">
+            mdi-trash-can-outline
+          </v-icon>
         </template>
       </v-list-item>
     </v-list>
@@ -28,19 +28,21 @@
     <v-text-field v-model="stepDescriptionInput" label="Schritt" append-inner-icon="mdi-plus"
                   @click:append-inner="addStep"
                   clearable/>
-    <v-list>
-      <draggable v-model="steps" item-key="stepNumber" @end="updateStepNumbers">
-        <template #item="{ element }">
-          <v-list-item :id="element.stepNumber" border :title="element.stepNumber" :subtitle="element.description">
-            <template v-slot:append>
-              <v-btn icon @click="removeStep(index)">
-                <v-icon>mdi-trash-can-outline</v-icon>
-              </v-btn>
+
+        <v-list>
+          <draggable v-model="steps" item-key="stepNumber" @end="updateStepNumbers" handle=".handle">
+            <template #item="{ element }">
+              <v-list-item :id="element.stepNumber" border :title="element.description">
+                <template v-slot:prepend>
+                  <v-icon class="handle">mdi-drag</v-icon>
+                </template>
+                <template v-slot:append>
+                  <v-icon @click="removeStep(element.stepNumber)">mdi-trash-can-outline</v-icon>
+                </template>
+              </v-list-item>
             </template>
-          </v-list-item>
-        </template>
-      </draggable>
-    </v-list>
+          </draggable>
+        </v-list>
     <v-btn-group>
       <v-btn color="red" prepend-icon="mdi-close">
         <ConfirmAbort/>
@@ -139,11 +141,9 @@ const addStep = () => {
   stepDescriptionInput.value = '';
 }
 
-const removeStep = (index) => {
-  steps.value.splice(index, 1);
+const removeStep = (stepNumber) => {
+  const indexFound = steps.value.findIndex((obj) => obj.stepNumber === stepNumber);
+  steps.value.splice(indexFound, 1);
   updateStepNumbers();
 }
 </script>
-
-
-
