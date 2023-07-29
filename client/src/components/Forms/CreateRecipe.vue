@@ -29,28 +29,27 @@
                   @click:append-inner="addStep"
                   clearable/>
 
-        <v-list>
-          <draggable v-model="steps" item-key="stepNumber" @end="updateStepNumbers" handle=".handle">
-            <template #item="{ element }">
-              <v-list-item :id="element.stepNumber" border :title="element.description">
-                <template v-slot:prepend>
-                  <v-icon class="handle">mdi-drag</v-icon>
-                </template>
-                <template v-slot:append>
-                  <v-icon @click="removeStep(element.stepNumber)">mdi-trash-can-outline</v-icon>
-                </template>
-              </v-list-item>
+    <v-list>
+      <draggable v-model="steps" item-key="stepNumber" @end="updateStepNumbers" handle=".handle">
+        <template #item="{ element }">
+          <v-list-item :id="element.stepNumber" border :title="element.description">
+            <template v-slot:prepend>
+              <v-icon class="handle">mdi-drag</v-icon>
             </template>
-          </draggable>
-        </v-list>
-    <v-btn-group>
-      <v-btn color="red" prepend-icon="mdi-close">
-        <ConfirmAbort/>
-      </v-btn>
-      <v-btn color="green" prepend-icon="mdi-content-save" @click="save">
-        Speichern
-      </v-btn>
-    </v-btn-group>
+            <template v-slot:append>
+              <v-icon @click="removeStep(element.stepNumber)">mdi-trash-can-outline</v-icon>
+            </template>
+          </v-list-item>
+        </template>
+      </draggable>
+    </v-list>
+    <v-btn color="red" prepend-icon="mdi-close" @click="openDialog = true">
+      Abbrechen
+      <ConfirmAbort :openDialog="openDialog" @close-dialog="openDialog = false"/>
+    </v-btn>
+    <v-btn color="green" prepend-icon="mdi-content-save" @click="save">
+      Speichern
+    </v-btn>
   </v-form>
 
   <v-row>
@@ -67,6 +66,8 @@ import axios from 'axios'
 import draggable from 'vuedraggable'
 import {reactive, ref} from 'vue'
 import ConfirmAbort from "@/components/Dialogs/Confirm-Abort.vue";
+
+const openDialog = ref(false);
 
 const snackBarTrigger = ref(false);
 const snackBarColor = ref('');

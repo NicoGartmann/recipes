@@ -10,10 +10,15 @@
     <v-col v-for="recipe in recipes" :key="recipe.name">
       <v-card :title="recipe.name" :subtitle="recipe.author" :text="recipe.description">
         <v-card-actions>
-          <v-btn><router-link :to="recipe._id">Details anzeigen</router-link></v-btn>
+          <v-btn>
+            <router-link :to="recipe._id">Details anzeigen</router-link>
+          </v-btn>
           <v-spacer/>
-          <ConfirmDeleteRecipe v-bind="{recipe}" @recipe-deleted-success="recipeDeletedSuccess"
-                               @recipe-deleted-failed="recipeDeletedFailed"></ConfirmDeleteRecipe>
+          <v-btn color="red" @click="openDialog = true">
+            <v-icon>mdi-trash-can-outline</v-icon>
+            <ConfirmDeleteRecipe :open-dialog="openDialog" v-bind="{recipe}" @recipe-deleted-success="recipeDeletedSuccess"
+                                 @recipe-deleted-failed="recipeDeletedFailed" @close-dialog="openDialog = false"/>
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -39,6 +44,8 @@
 import {onMounted, ref} from "vue";
 import axios from "axios";
 import ConfirmDeleteRecipe from "@/components/Dialogs/Confirm-Delete-Recipe.vue";
+
+const openDialog = ref(false);
 
 const snackBarTrigger = ref(false);
 const snackBarMessage = ref();
