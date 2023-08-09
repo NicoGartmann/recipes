@@ -10,7 +10,8 @@ services:
     image: recipe-server:0.0.1
     ports:
       - "3000:3000"
-    depends_on: mongodb
+    depends_on:
+      - mongodb
     restart: unless-stopped
 
   mongodb:
