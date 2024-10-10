@@ -1,4 +1,3 @@
-# Dockerfile-server-client im "server" Ordner
 FROM node:14
 
 WORKDIR /app
